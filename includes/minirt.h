@@ -12,6 +12,7 @@
 
 #ifndef MINI_RT_H
 # define MINI_RT_H
+# define MAX_T 100000000.0
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -194,6 +195,7 @@ float               solve_quadratic(float a, float b, float c);
 int                 iterate_object_sphere(t_sphere *sphere, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
 int                 iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
 float               *intersect_object(t_object_params *object_params, t_object_figure *object_figure, t_vector *ray_dir);
+int                 get_light_point(t_object_lights *lights, t_object_params *obj_params, t_object_figure *obj_figure);
 void                ray_tracing(void *mlx, void *window, t_scene scene);
 
 #endif

@@ -6,16 +6,15 @@ float   *intersect_object(t_object_params *object_params, t_object_figure *objec
     float       *tmp;
     t_vector    ray_dir_tmp;
 
-    t = 0;
+    t = -1;
     tmp = NULL;
-
-    if ((iterate_object_sphere(object_figure->sphere, object_params, ray_dir, object_figure->ray_orig, &t)) >= 0)
+    if ((iterate_object_sphere(object_figure->sphere, object_params, ray_dir, object_figure->ray_orig, &t)))
         tmp = &t;
-    if ((iterate_object_plane(object_figure->plane, object_params, ray_dir, object_figure->ray_orig, &t)) >= 0)
-    {
-        if ((tmp && *tmp > t) || !tmp)
-            tmp = &t;
-    }
+    // if ((iterate_object_plane(object_figure->plane, object_params, ray_dir, object_figure->ray_orig, &t)))
+    // {
+    //     if ((tmp && *tmp > t) || !tmp)
+    //         tmp = &t;
+    // }
     if (tmp)
     {
         ray_dir_tmp = *ray_dir;

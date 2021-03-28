@@ -39,7 +39,7 @@ int           iterate_object_sphere(t_sphere *sphere, t_object_params *object_pa
             if (((*t < tmp && tmp != -1) || tmp == -1))
             {
                 tmp = *t;
-                //vector_subtraction(&(object_params->norm), &(object_params->intersect_point), &(ptr->center));
+                vector_subtraction(&(object_params->norm), &(object_params->intersect_point), &(ptr->center));
                 init_color(&(object_params->color), ptr->color.r, ptr->color.g, ptr->color.b);
             }
         }

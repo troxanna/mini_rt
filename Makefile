@@ -9,7 +9,8 @@ FUNC = 	scene/camera.c scene/light.c \
 		utils/color.c \
 		parser/parser.c parser/parser_object_scene.c parser/parser_object_figure.c \
 		ray_tracing/ray_tracing.c \
-		ray_tracing/intersect/intersect_object.c ray_tracing/intersect/intersect_plane.c ray_tracing/intersect/intersect_sphere.c
+		ray_tracing/intersect/intersect_object.c ray_tracing/intersect/intersect_plane.c ray_tracing/intersect/intersect_sphere.c \
+		ray_tracing/lighting/lighting.c
 
 SRCS = $(addprefix $(DIR_SRCS), $(FUNC))
 
@@ -17,18 +18,16 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = miniRT
 
-LIBMLX = libmlx.dylib
+
 
 GCC = gcc
 FLAGS =  -g
 
 %.o: %.c
-	$(GCC) $(FLAGS) -I $(DIR_INC) -c $< -o $@
+	$(GCC) $(FLAGS) -I $(DIR_INC) -c $< -o $@ 
 
 $(NAME): $(OBJS)
-	make -C ./minilibx_mms_20200219
-	cp ./minilibx_mms_20200219/libmlx.dylib .
-	$(GCC) $(FLAGS) -I $(DIR_INC) $(LIBMLX) $(OBJS) -o $(NAME)
+	$(GCC) $(FLAGS) -I $(DIR_INC) -Imlx_linux -Lmlx_linux $(OBJS) -o $(NAME) -lmlx -lXext -lX11 -lm
 
 all: $(NAME)
 

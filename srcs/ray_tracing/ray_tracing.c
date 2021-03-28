@@ -1,6 +1,6 @@
 #include "../../includes/minirt.h"
 
-static void    init_ray_tracing(t_scene *scene, t_object_figure *object_figure)
+static void    init_ray_tracing(t_scene *scene, t_object_figure *object_figure, t_object_lights *object_lights)
 {
     object_figure->plane = scene->plane;
     object_figure->sphere = scene->sphere;
@@ -8,6 +8,8 @@ static void    init_ray_tracing(t_scene *scene, t_object_figure *object_figure)
     object_figure->square = scene->square;
     object_figure->cylinder = scene->cylinder;
     object_figure->ray_orig = &(scene->camera->origin);
+    object_lights->amb_light = scene->amb_light;
+    object_lights->point_light = scene->point_light;
 }
 
 
@@ -33,13 +35,14 @@ static t_vector    *new_ray(t_scene *scene, int pixel_x, int pixel_y)
 void    ray_tracing(void *mlx, void *window, t_scene scene)
 {
     t_object_params     object_params;
+    t_object_lights     object_lights;
     t_object_figure     object_figure;
     t_vector            *ray_dir;
     float               pixel_x;
     float               pixel_y;
     int                 color;
     
-    init_ray_tracing(&scene, &object_figure);
+    init_ray_tracing(&scene, &object_figure, &object_lights);
     pixel_x = 0;
     pixel_y = 0;
     while (pixel_y < scene.resolution->height)
@@ -50,8 +53,8 @@ void    ray_tracing(void *mlx, void *window, t_scene scene)
             ray_dir = new_ray(&scene, pixel_x, pixel_y);
             if (intersect_object(&object_params, &object_figure, ray_dir))
             {
-                color = create_trgb(0, object_params.color.r, object_params.color.g, object_params.color.b);
-                //color = get_light_point(scene->object, &object_params);
+                //color = create_trgb(0, object_params.color.r, object_params.color.g, object_params.color.b);
+                color = get_light_point(&object_lights, &object_params, &object_figure);
             }
             else
                 color = create_trgb(0, 0, 0, 0);

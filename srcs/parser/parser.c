@@ -31,6 +31,7 @@ static void		screen_resolution_conversion(t_scene *scene, void *mlx_ptr)
 	int			height_max;
 
 	mlx_get_screen_size(mlx_ptr, &width_max, &height_max);
+	printf("%s\n", "test");
 	if (scene->resolution->width > width_max)
 		scene->resolution->width = width_max;
 	if (scene->resolution->height > height_max)
@@ -54,14 +55,13 @@ int				parser_rt(char *scene_rt, void *mlx_ptr, t_scene *scene)
 		if (line != NULL)
 		{
 			result_parser = parser_object_scene(line, scene);
-			printf("%d\n", result_parser);
 			if (result_parser == -1)
 				return (0);
 		}
 		free(line);
 	}
 	close(fd);
-	screen_resolution_conversion(scene, mlx_ptr);
+	//screen_resolution_conversion(scene, mlx_ptr);
 	if (result_gnl == -1 || check_scene(scene) == -1)
 		return (0);
 	return (1);

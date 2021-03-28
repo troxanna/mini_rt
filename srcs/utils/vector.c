@@ -82,6 +82,7 @@ t_vector       *matrix_to_world(t_vector *ray_dir, t_vector *camera_dir)
     t_vector    vector_y;
     t_vector    *result;
 
+    vector_normalize(camera_dir);
     init_vector(&tmp_vector, 0, 1, 0);
     result = new_vector(0, 0, 0);
     vector_cross_products(&vector_x, &tmp_vector, camera_dir);

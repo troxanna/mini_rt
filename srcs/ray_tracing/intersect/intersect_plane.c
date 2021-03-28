@@ -25,23 +25,23 @@ static int     intersect_plane(t_vector *ray_orig, t_vector *ray_dir, float *t, 
     return (0);
 }
 
-int           iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t)
+float           *iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t)
 {
     t_plane    *ptr;
-    float       tmp;
+    float       *tmp;
     //t_vector    ray_dir_tmp;
 
-    tmp = -1;
+    tmp = NULL;
     ptr = plane;
     while (ptr)
     {
-        if ((intersect_plane(ray_orig, ray_dir, t, ptr)) > 0)
+        if ((intersect_plane(ray_orig, ray_dir, t, ptr)))
         {
-            if (((*t < tmp && tmp != -1) || tmp == -1))
+            if (tmp != NULL && *tmp > *t || tmp == NULL)
             {
-                tmp = *t;
+                tmp = t;
                 //vector_subtraction(&(object_params->norm), &(object_params->intersect_point), &(ptr->center));
-                //init_color(&(object_params->color), ptr->color.r, ptr->color.g, ptr->color.b);
+                init_color(&(object_params->color), ptr->color.r, ptr->color.g, ptr->color.b);
             }
         }
         ptr = ptr->next;
