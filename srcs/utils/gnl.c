@@ -56,6 +56,7 @@ int				get_line(int fd, char **line)
 	int			read_b;
 
 	read_b = 1;
+	int i = 0;
 	*line = NULL;
 	while ((read_b = read(fd, &ch, 1)))
 	{

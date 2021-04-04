@@ -90,6 +90,7 @@ t_vector       *matrix_to_world(t_vector *ray_dir, t_vector *camera_dir)
     result->x = ray_dir->x * vector_x.x + ray_dir->y * vector_x.y + ray_dir->z * vector_x.z;
     result->y = ray_dir->x * vector_y.x + ray_dir->y * vector_y.y + ray_dir->z * vector_y.z;
     result->z = ray_dir->x * camera_dir->x + ray_dir->y * camera_dir->y + ray_dir->z * camera_dir->z;
+    result->z = result->z;
     return (result);
 }
 

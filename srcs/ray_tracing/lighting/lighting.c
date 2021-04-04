@@ -1,5 +1,38 @@
 #include "../../../includes/minirt.h"
 
+// static int     angle_between_norm_and_light(t_vector *norm, t_vector *L)
+// {
+//   float   len_NL;
+//   float   cos;
+//   float   angle;
+
+//   len_NL = vector_length(norm) * vector_length(L);
+//   cos = vector_length(L) / len_NL;
+//   angle = acos(cos) * 180 / M_PI;
+//   if (angle > 90)
+//     return (1);
+//   else
+//     return (0);
+// }
+
+static int     shadow_check(t_object_figure *obj_figure, t_vector *L, t_vector *intersect_point)
+{
+  float   range_t[3];
+  t_object_params object_params_tmp;
+
+  range_t[0] = 0;
+  range_t[1] = 0.01;
+  range_t[2] = 65536;
+  //printf("%p\n", &(obj_figure->triangle));
+  if (obj_figure->sphere && iterate_object_sphere(obj_figure->sphere, &object_params_tmp, L, intersect_point, range_t))
+      return (1);
+  if (obj_figure->triangle && iterate_object_triangle(obj_figure->triangle, &object_params_tmp, L, intersect_point, range_t))
+      return (1);
+  // if (obj_figure->plane && iterate_object_plane(obj_figure->plane, &object_params_tmp, L, intersect_point, range_t));
+  //     return (1);
+  return (0);
+}
+
 static void    add_intensity_point_light(float *intensity, t_point_light *light, float NL)
 {
     intensity[0] = intensity[0] + light->brightness * light->color.r / 255 * NL;
@@ -25,11 +58,22 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
   {
     vector_subtraction(&L, &(ptr->point_light), &(obj_params->intersect_point));
     vector_normalize(&L);
+    // if (angle_between_norm_and_light(&(obj_params->norm),&L))    
+    //   scalars_mult_vectors(-1, &(obj_params->norm));
+    // printf("%f\n", obj_params->norm.x);
+    // printf("%f\n", obj_params->norm.y);
+    // printf("%f\n", obj_params->norm.z);
     //scalars_mult_vectors(0.003, light_object->norm);
     NL = vector_dot_products(&(obj_params->norm), &L);
-    if (NL < 0)
+    if (NL < 0 && !obj_params->flag)
         NL = 0;
-    
+    else if (NL < 0 && obj_params->flag)
+    {
+        obj_params->norm.z = obj_params->norm.z * (-1);
+        //scalars_mult_vectors(-1, &(obj_params->norm));
+        NL = vector_dot_products(&(obj_params->norm), &L);
+    }
+    tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
     //add_intensity_point_light(intensity, ptr, NL);
     // while (ptr_sphere)
     // {
@@ -54,8 +98,9 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
     //     }
     //     ptr_sphere = ptr_sphere->next;
     // }
-    if (tmp != 1)
+    if (tmp == 0)
       add_intensity_point_light(intensity, ptr, NL);
+    //printf("%d\n", tmp);
     ptr = ptr->next;
   }
 }
@@ -80,8 +125,14 @@ int   get_light_point(t_object_lights *lights, t_object_params *obj_params, t_ob
   float intensity_ambient_light[3];
   float intensity_point_lights[3];
   int color;
-
+  // printf("%d\n", obj_params->color.r);
+  // printf("%d\n", obj_params->color.g);
+  // printf("%d\n", obj_params->color.b);
   vector_normalize(&(obj_params->norm));
+  // printf("%f\n", obj_params->norm.x);
+  // printf("%f\n", obj_params->norm.y);
+  // printf("%f\n", obj_params->norm.z);
+  
   intensity_point_lights[0] = 0;
   intensity_point_lights[1] = 0;
   intensity_point_lights[2] = 0;

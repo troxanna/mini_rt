@@ -32,7 +32,7 @@ static t_vector    *new_ray(t_scene *scene, int pixel_x, int pixel_y)
 
 
 
-void    ray_tracing(void *mlx, void *window, t_scene scene)
+void    ray_tracing(t_data *img, t_scene scene)
 {
     t_object_params     object_params;
     t_object_lights     object_lights;
@@ -59,7 +59,7 @@ void    ray_tracing(void *mlx, void *window, t_scene scene)
             else
                 color = create_trgb(0, 0, 0, 0);
             free(ray_dir);
-            mlx_pixel_put(mlx, window, pixel_x, pixel_y, color);
+            my_mlx_pixel_put(img, pixel_x, pixel_y, color);
             pixel_x++;
         }
         pixel_y++;

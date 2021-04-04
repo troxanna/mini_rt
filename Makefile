@@ -10,6 +10,7 @@ FUNC = 	scene/camera.c scene/light.c \
 		parser/parser.c parser/parser_object_scene.c parser/parser_object_figure.c \
 		ray_tracing/ray_tracing.c \
 		ray_tracing/intersect/intersect_object.c ray_tracing/intersect/intersect_plane.c ray_tracing/intersect/intersect_sphere.c \
+		ray_tracing/intersect/intersect_triangle.c ray_tracing/intersect/intersect_square.c ray_tracing/intersect/intersect_cylinder.c \
 		ray_tracing/lighting/lighting.c
 
 SRCS = $(addprefix $(DIR_SRCS), $(FUNC))
@@ -17,8 +18,6 @@ SRCS = $(addprefix $(DIR_SRCS), $(FUNC))
 OBJS = $(SRCS:.c=.o)
 
 NAME = miniRT
-
-
 
 GCC = gcc
 FLAGS =  -g

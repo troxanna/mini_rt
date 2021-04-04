@@ -158,7 +158,7 @@ static t_cylinder       *parser_cylinder(char *line, int i, t_scene *scene)
         return (NULL);
     while (line[i] == ' ' || line[i] == '\t')
             i++;  
-   if (!(ft_atorgb(&color_cylinder, line, &i)))
+    if (!(ft_atorgb(&color_cylinder, line, &i)))
         return (NULL);
     while (line[i] != '\0')
     {
@@ -199,6 +199,7 @@ int		parser_object_figure(int i, char *line, t_scene *scene)
     }
     else if (line[i] == 'c' && line[i + 1] == 'y')
     {
+        printf("%s\n", "test");
         i++;
         if (!(scene->cylinder = parser_cylinder(line, ++i, scene)))
             return (-1);
