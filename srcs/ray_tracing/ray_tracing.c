@@ -15,7 +15,7 @@ static void    init_ray_tracing(t_scene *scene, t_object_figure *object_figure, 
 
 static t_vector    *new_ray(t_scene *scene, int pixel_x, int pixel_y)
 {
-    t_vector       *ray;
+    t_vector        *ray;
     float           ray_x; 
     float           ray_y;
     float           scale;

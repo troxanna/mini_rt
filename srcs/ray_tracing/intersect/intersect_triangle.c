@@ -75,7 +75,6 @@ float           iterate_object_triangle(t_triangle *triangle, t_object_params *o
     float       tmp;
     //t_vector    ray_dir_tmp;
 
-
     tmp = 0;
     ptr = triangle;
     while (ptr)

@@ -21,8 +21,9 @@ static int     shadow_check(t_object_figure *obj_figure, t_vector *L, t_vector *
   t_object_params object_params_tmp;
 
   range_t[0] = 0;
-  range_t[1] = 0.01;
+  range_t[1] = 0.1;
   range_t[2] = 65536;
+  //range_t[2] = 0.9999;
   //printf("%p\n", &(obj_figure->triangle));
   if (obj_figure->sphere && iterate_object_sphere(obj_figure->sphere, &object_params_tmp, L, intersect_point, range_t))
       return (1);
@@ -58,46 +59,16 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
   {
     vector_subtraction(&L, &(ptr->point_light), &(obj_params->intersect_point));
     vector_normalize(&L);
-    // if (angle_between_norm_and_light(&(obj_params->norm),&L))    
-    //   scalars_mult_vectors(-1, &(obj_params->norm));
-    // printf("%f\n", obj_params->norm.x);
-    // printf("%f\n", obj_params->norm.y);
-    // printf("%f\n", obj_params->norm.z);
-    //scalars_mult_vectors(0.003, light_object->norm);
     NL = vector_dot_products(&(obj_params->norm), &L);
     if (NL < 0 && !obj_params->flag)
-        NL = 0;
+        tmp = 1;
     else if (NL < 0 && obj_params->flag)
     {
-        obj_params->norm.z = obj_params->norm.z * (-1);
-        //scalars_mult_vectors(-1, &(obj_params->norm));
+        //obj_params->norm.z = obj_params->norm.z * (-1);
+        scalars_mult_vectors(-1, &(obj_params->norm));
         NL = vector_dot_products(&(obj_params->norm), &L);
     }
-    tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
-    //add_intensity_point_light(intensity, ptr, NL);
-    // while (ptr_sphere)
-    // {
-    //   //printf("%f\n", t);
-    //   //умнржить L на 0,01
-    //     if (((sphere_intersect(light_object->intersect_point, L, &t, ptr_sphere)) > 0))
-    //     {
-    //       //printf ("%f\n", t);
-    //       //добавить проверку, когда один объект перекрывает другой
-    //         if (t > 0.1)
-    //           tmp = 1;
-    //     }
-    //     ptr_sphere = ptr_sphere->next;
-    // }
-    // while (ptr_triangle)
-    // {
-    //   //умнржить L на 0,01
-    //     if (((triangle_intersect(light_object->intersect_point, L, &t, ptr_sphere)) > 0))
-    //     {
-    //         if (t > 0.1)
-    //           tmp = 1;
-    //     }
-    //     ptr_sphere = ptr_sphere->next;
-    // }
+    //tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
     if (tmp == 0)
       add_intensity_point_light(intensity, ptr, NL);
     //printf("%d\n", tmp);

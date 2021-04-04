@@ -27,6 +27,7 @@ float   *intersect_object(t_object_params *object_params, t_object_figure *objec
     {
         if (tmp == NULL || (tmp && *tmp > range_t[0]))
         {
+            //printf("test");
             object_params->color = object_params_tmp.color;
             object_params->norm = object_params_tmp.norm;
             object_params->intersect_point = object_params_tmp.intersect_point;
@@ -34,17 +35,17 @@ float   *intersect_object(t_object_params *object_params, t_object_figure *objec
             tmp = range_t;
         }
     }
-    // if (object_figure->square && (iterate_object_square(object_figure->square, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
-    // {
-    //     if (tmp == NULL || (tmp && *tmp > range_t[0]))
-    //     {
-    //         object_params->color = object_params_tmp.color;
-    //         object_params->norm = object_params_tmp.norm;
-    //         object_params->intersect_point = object_params_tmp.intersect_point;
-    //         object_params->flag = 1;
-    //         tmp = range_t;
-    //     }
-    // }
+    if (object_figure->square && (iterate_object_square(object_figure->square, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
+    {
+        if (tmp == NULL || (tmp && *tmp > range_t[0]))
+        {
+            object_params->color = object_params_tmp.color;
+            object_params->norm = object_params_tmp.norm;
+            object_params->intersect_point = object_params_tmp.intersect_point;
+            object_params->flag = 1;
+            tmp = range_t;
+        }
+    }
     if (object_figure->cylinder && (iterate_object_cylinder(object_figure->cylinder, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
     {
         if (tmp == NULL || (tmp && *tmp > range_t[0]))
@@ -67,7 +68,7 @@ float   *intersect_object(t_object_params *object_params, t_object_figure *objec
             tmp = range_t;
         }
     }
-    if (tmp)
+    if (tmp != NULL)
     {
         ray_dir_tmp = *ray_dir;
         scalars_mult_vectors(*tmp, &ray_dir_tmp);

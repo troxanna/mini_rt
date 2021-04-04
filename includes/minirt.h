@@ -22,6 +22,11 @@
 
 # include "mlx.h"
 
+typedef struct  s_mls {
+        void    *mlx;
+        void    *win;
+}               t_mlx;
+
 typedef struct	    s_vector
 {
 	float           x;

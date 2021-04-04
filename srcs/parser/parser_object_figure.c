@@ -199,7 +199,7 @@ int		parser_object_figure(int i, char *line, t_scene *scene)
     }
     else if (line[i] == 'c' && line[i + 1] == 'y')
     {
-        printf("%s\n", "test");
+        //printf("%s\n", "test");
         i++;
         if (!(scene->cylinder = parser_cylinder(line, ++i, scene)))
             return (-1);
