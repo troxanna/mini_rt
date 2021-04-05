@@ -23,14 +23,14 @@ void                ft_init_scene(t_scene *scene)
     scene->square = NULL;
 }
 
-// t_scene    *new_scene(t_object *object)
-// {
-//     t_scene *scene;
 
-//     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
-//         exit(1);
-//     scene->width = object->resolution->width;
-//     scene->height = object->resolution->height;
-//     scene->object = object;
-//     return (scene);
-// }
+int		check_scene(t_scene *scene)
+{
+	if (scene->resolution == NULL)
+		return (-1);
+	else if (scene->amb_light == NULL)
+		return (-1);
+	else if (scene->camera == NULL)
+		return (-1);
+	return (0);
+}

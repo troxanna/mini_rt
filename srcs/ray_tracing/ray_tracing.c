@@ -53,6 +53,7 @@ void    ray_tracing(t_data *img, t_scene scene)
             ray_dir = new_ray(&scene, pixel_x, pixel_y);
             if (intersect_object(&object_params, &object_figure, ray_dir))
             {
+                init_ray_tracing(&scene, &object_figure, &object_lights);
                 //color = create_trgb(0, object_params.color.r, object_params.color.g, object_params.color.b);
                 color = get_light_point(&object_lights, &object_params, &object_figure);
             }

@@ -12,18 +12,6 @@
 
 #include "../../includes/minirt.h"
 
-//вынести в файл сцены
-
-static int		check_scene(t_scene *scene)
-{
-	if (scene->resolution == NULL)
-		return (-1);
-	else if (scene->amb_light == NULL || scene->point_light== NULL)
-		return (-1);
-	else if (scene->camera == NULL)
-		return (-1);
-	return (0);
-}
 
 static void		screen_resolution_conversion(t_scene *scene, void *mlx_ptr)
 {
@@ -60,7 +48,7 @@ int				parser_rt(char *scene_rt, void *mlx_ptr, t_scene *scene)
 	}
 	close(fd);
 
-	//screen_resolution_conversion(scene, mlx_ptr);
+	screen_resolution_conversion(scene, mlx_ptr);
 	if (result_gnl == -1 || check_scene(scene) == -1)
 		return (0);
 	return (1);

@@ -50,9 +50,8 @@ int     main(int argc, char **argv)
         img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
                                  &img.endian);
         ray_tracing(&img, scene);
-        mlx_hook(mlx.win, 2, 1L<<0, ft_close, &mlx);
+        //mlx_hook(mlx.win, 17, 1L<<17, ft_close, &mlx);
         mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
-        //free_scene
         mlx_loop(mlx.mlx);
         return (1);
     }

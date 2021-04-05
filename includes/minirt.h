@@ -167,6 +167,7 @@ typedef struct	        s_scene
 void	            ft_error(int id_err);
 int			        get_line(int fd, char **line);
 void                ft_init_scene(t_scene *scene);
+int                 check_scene(t_scene *scene);
 t_rgb               *new_color(int r, int g, int b);
 void                init_color(t_rgb *color, int r, int g, int b);
 int                 create_trgb(int t, int r, int g, int b);
