@@ -27,7 +27,8 @@ static int     shadow_check(t_object_figure *obj_figure, t_vector *L, t_vector *
   // init_vector(&tmp_inter, )
   //range_t[2] = 0.9999;
   //printf("%p\n", &(obj_figure->triangle));
-  if (obj_figure->sphere && iterate_object_sphere(obj_figure->sphere, &object_params_tmp, L, intersect_point, range_t))
+  //делать проверку диапазона в этой функции
+  if (obj_figure->sphere && iterate_object_sphere(obj_figure->sphere, &object_params_tmp, L, intersect_point))
   {
     return (1);
   }
@@ -63,7 +64,8 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
   {
     tmp = 0;
     vector_subtraction(&L, &(ptr->point_light), &(obj_params->intersect_point));
-    vector_normalize(&L);
+    //vector_normalize(&L);
+    //так как для поиска тени нам нужна не нормализованная длина L, то оставляем ее не нормализованной
     NL = vector_dot_products(&(obj_params->norm), &L);
     if (NL < 0)
         NL = 0;
@@ -73,7 +75,7 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
     //     scalars_mult_vectors(-1, &(obj_params->norm));
     //     NL = vector_dot_products(&(obj_params->norm), &L);
     // }
-    tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
+    //tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
     if (tmp == 0)
       add_intensity_point_light(intensity, ptr, NL);
     else
