@@ -22,16 +22,13 @@ static int     shadow_check(t_object_figure *obj_figure, t_vector *L, t_vector *
 
   range_t[0] = 0;
   range_t[1] = 0.01;
-  range_t[2] = 0.9;
+  range_t[2] = 1;
   // t_vector    tmp_inter;
   // init_vector(&tmp_inter, )
   //range_t[2] = 0.9999;
   //printf("%p\n", &(obj_figure->triangle));
-
   if (obj_figure->sphere && iterate_object_sphere(obj_figure->sphere, &object_params_tmp, L, intersect_point, range_t))
   {
-    if (range_t[0] > range_t[1] && range_t[0] < range_t[2])
-        printf("%f\n", range_t[0]);
     return (1);
   }
   // if (obj_figure->triangle && iterate_object_triangle(obj_figure->triangle, &object_params_tmp, L, intersect_point, range_t))
@@ -64,11 +61,12 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
 
   while (ptr)
   {
+    tmp = 0;
     vector_subtraction(&L, &(ptr->point_light), &(obj_params->intersect_point));
     vector_normalize(&L);
     NL = vector_dot_products(&(obj_params->norm), &L);
-    if (NL < 0 && !obj_params->flag)
-        tmp = 1;
+    if (NL < 0)
+        NL = 0;
     // else if (NL < 0 && obj_params->flag)
     // {
     //     //obj_params->norm.z = obj_params->norm.z * (-1);
@@ -76,10 +74,10 @@ static void         get_color_sum_point_lights(t_object_figure *obj_figure,
     //     NL = vector_dot_products(&(obj_params->norm), &L);
     // }
     tmp = shadow_check(obj_figure, &L, &(obj_params->intersect_point));
-    if (tmp == 1)
-      printf("%d\n", tmp);
     if (tmp == 0)
       add_intensity_point_light(intensity, ptr, NL);
+    else
+      printf("test");
     //printf("%d\n", tmp);
     ptr = ptr->next;
   }
