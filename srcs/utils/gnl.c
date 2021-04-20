@@ -6,7 +6,7 @@
 /*   By: troxanna <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 17:22:46 by troxanna          #+#    #+#             */
-/*   Updated: 2021/03/21 17:33:42 by troxanna         ###   ########.fr       */
+/*   Updated: 2021/04/20 19:57:32 by troxanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int				get_line(int fd, char **line)
 	int			read_b;
 
 	read_b = 1;
-	int i = 0;
 	*line = NULL;
 	while ((read_b = read(fd, &ch, 1)))
 	{

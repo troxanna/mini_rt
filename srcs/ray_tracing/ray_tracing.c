@@ -26,7 +26,7 @@ static t_vector    *new_ray(t_scene *scene, int pixel_x, int pixel_y)
     ray_y = (1 - 2 * ((pixel_y + 0.5) / (float)scene->resolution->height)) * scale; 
     init_vector(&tmp_ray, ray_x, ray_y, -1);
     ray = matrix_to_world(&tmp_ray, &(scene->camera->direction));
-    vector_normalize(ray);
+    //vector_normalize(ray);
     return (ray);
 }
 
@@ -56,6 +56,7 @@ void    ray_tracing(t_data *img, t_scene scene)
                 init_ray_tracing(&scene, &object_figure, &object_lights);
                 //color = create_trgb(0, object_params.color.r, object_params.color.g, object_params.color.b);
                 color = get_light_point(&object_lights, &object_params, &object_figure);
+                //color = create_trgb(0, object_params.color.r, object_params.color.g, object_params.color.b);
             }
             else
                 color = create_trgb(0, 0, 0, 0);

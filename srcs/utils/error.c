@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: troxanna <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/21 17:19:09 by troxanna          #+#    #+#             */
-/*   Updated: 2021/03/21 17:22:06 by troxanna         ###   ########.fr       */
+/*   Created: 2021/04/20 19:48:11 by troxanna          #+#    #+#             */
+/*   Updated: 2021/04/20 19:48:40 by troxanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@ void	ft_error(int id_err)
 		perror("Ошибка парсера");
 	else if (id_err == 3)
 		perror("Ошибка чтения файла");
-	exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }

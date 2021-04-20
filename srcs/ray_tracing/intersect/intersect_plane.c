@@ -1,11 +1,23 @@
 #include "../../../includes/minirt.h"
 
+// static void     get_object_params_plane(t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float closest_t, t_plane *plane)
+// {
+//     t_vector    ray_dir_tmp;
+
+//     ray_dir_tmp = *ray_dir;
+//     scalars_mult_vectors(closest_t, &ray_dir_tmp);
+//     vector_addition(&(object_params->intersect_point), ray_orig, &ray_dir_tmp);
+//     vector_subtraction(&(object_params->norm), &(object_params->intersect_point), &(sphere->center));
+//     init_color(&(object_params->color), sphere->color.r, sphere->color.g, sphere->color.b);
+// }
+
 // static int     intersect_plane(t_vector *ray_orig, t_vector *ray_dir, float *t, t_plane *plane)
 // {
 //     float       denom;
 //     float y;
 //     t_vector    LP;
 //     vector_normalize(&(plane->direction));
+//     vector_normalize(ray_dir);
 //     //vector_normalize(plane->point_plane);
 //     denom = vector_dot_products(ray_dir, &(plane->direction));
 //     //printf("%f\n", denom);
@@ -58,8 +70,8 @@ static int intersect_plane(t_vector *ray_orig, t_vector *ray_dir, float *t, t_pl
     t_vector    n;
 
     init_vector(&n, plane->direction.x, plane->direction.y, plane->direction.z);
-    vector_normalize(&n);
-    vector_normalize(ray_dir);
+    //vector_normalize(&n);
+    //vector_normalize(ray_dir);
     d = -vector_dot_products(&(plane->point_plane), &n);
     //printf("%d\n", *t);
     // n = vec_normalize(n);
@@ -71,29 +83,38 @@ static int intersect_plane(t_vector *ray_orig, t_vector *ray_dir, float *t, t_pl
     return (0);
 }
 
-float           iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t)
+float           iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig)
 {
     t_plane    *ptr;
-    float       tmp;
-    //t_vector    ray_dir_tmp;
+    float   range_t[3];
+    float       closest_t;
+    t_plane    *closest_plane;
 
-    tmp = 0;
+    range_t[0] = 0;
+    range_t[1] = 0.0000001;
+    range_t[2] = 65536;
+    closest_plane = NULL;
+    closest_t = 65536;
     ptr = plane;
     while (ptr)
     {
-        if ((intersect_plane(ray_orig, ray_dir, t, ptr)))
+        if ((intersect_plane(ray_orig, ray_dir, &range_t[0], ptr)))
         {
-            if ((t[0] > t[1] && t[0] < t[2] && t[0] < tmp) || (tmp == 0 && t[0] >= t[1] && t[0] < t[2]))
+            if (range_t[0] >= range_t[1] && range_t[0] < range_t[2] && range_t[0] < closest_t)
             {
-                tmp = t[0];
-                init_vector(&(object_params->norm), plane->direction.x, plane->direction.y, plane->direction.z);
-                //vector_subtraction(&(object_params->norm), &(object_params->intersect_point), &(ptr->center));
-                init_color(&(object_params->color), ptr->color.r, ptr->color.g, ptr->color.b);
+                closest_t = range_t[0];
+                closest_plane = ptr;
             }
         }
         ptr = ptr->next;
     }
-    t[0] = tmp;
-    //printf ("%f\n", tmp);
-    return (tmp);
+    //проверить возвращаемое t у плоскости
+    if (closest_plane)
+    {
+        init_color(&object_params->color, closest_plane->color.r, closest_plane->color.g, closest_plane->color.b);
+        init_vector(&object_params->norm, closest_plane->direction.x, closest_plane->direction.y, closest_plane->direction.z);
+        vector_normalize(&(object_params->norm));
+        return (closest_t);
+    }
+    return (0);
 }

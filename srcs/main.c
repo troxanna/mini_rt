@@ -26,17 +26,27 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 
 
-int     ft_close(int keycode, t_mlx *vars)
+int     mlx_action_window(int keycode, t_mlx *vars)
 {
-    mlx_destroy_window(vars->mlx, vars->win);
-    exit (0);
+    printf("%d\n", keycode);
+    if (keycode == 53)
+        exit (0);
+    if (keycode == 123)
+    {
+        mlx_destroy_image(vars->mlx, vars->img);
+        mlx_destroy_window(vars->mlx, vars->win);
+    }
+    // if (keycode == 124)
+    // {
+
+    // }
+    //mlx_destroy_window(vars->mlx, vars->win);
+
 }
 
 int     main(int argc, char **argv)
 {
     t_mlx   mlx;
-    // void        *mlx_ptr;
-    // void        *window;
     t_scene     scene;
     t_data      img;
 
@@ -50,7 +60,9 @@ int     main(int argc, char **argv)
         img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
                                  &img.endian);
         ray_tracing(&img, scene);
-        //mlx_hook(mlx.win, 17, 1L<<17, ft_close, &mlx);
+        mlx.img = &img;
+        mlx.camera = scene.camera;
+        mlx_hook(mlx.win, 2, 1L<<0, mlx_action_window, &mlx);
         mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
         mlx_loop(mlx.mlx);
         return (1);

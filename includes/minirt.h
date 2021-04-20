@@ -12,7 +12,6 @@
 
 #ifndef MINI_RT_H
 # define MINI_RT_H
-# define MAX_T 100000000.0
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -21,11 +20,6 @@
 # include <stdio.h>
 
 # include "mlx.h"
-
-typedef struct  s_mls {
-        void    *mlx;
-        void    *win;
-}               t_mlx;
 
 typedef struct	    s_vector
 {
@@ -128,7 +122,6 @@ typedef struct	        s_object_params
     t_vector            norm;
     t_rgb               color;
     int                 flag;
-    //добавить флаг для плоской фигуры для отражения нормали (вычисляем угол и меняем знак у координат нормали)
 }		                t_object_params;
 
 
@@ -163,6 +156,14 @@ typedef struct	        s_scene
     t_cylinder          *cylinder;
 
 }		                t_scene;
+
+typedef struct  s_mlx 
+{
+    void        *mlx;
+    void        *win;
+    t_data      *img;
+    t_camera    *camera;     
+}              t_mlx;
 
 void	            ft_error(int id_err);
 int			        get_line(int fd, char **line);
@@ -205,13 +206,13 @@ int			        ft_atovec_norm(t_vector *result, char *str, int *i);
 int		            parser_object_figure(int i, char *line, t_scene *scene);
 int		            parser_object_scene(char *line, t_scene *scene);
 int                 parser_rt(char *scene_rt, void *mlx_ptr, t_scene *scene);
-float               solve_quadratic(float a, float b, float c);
-float               iterate_object_cylinder(t_cylinder *cylinder, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
-float               iterate_object_square(t_square *square, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
-float               iterate_object_triangle(t_triangle *triangle, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
-float               iterate_object_sphere(t_sphere *sphere, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
-float               iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig, float *t);
-float               *intersect_object(t_object_params *object_params, t_object_figure *object_figure, t_vector *ray_dir);
+float               solve_quadratic(float a, float b, float c, float *t);
+float               iterate_object_cylinder(t_cylinder *cylinder, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig);
+float               iterate_object_square(t_square *square, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig);
+float               iterate_object_triangle(t_triangle *triangle, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig);
+float               iterate_object_sphere(t_sphere *sphere, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig);
+float               iterate_object_plane(t_plane *plane, t_object_params *object_params, t_vector *ray_dir, t_vector *ray_orig);
+float               intersect_object(t_object_params *object_params, t_object_figure *object_figure, t_vector *ray_dir);
 int                 get_light_point(t_object_lights *lights, t_object_params *obj_params, t_object_figure *obj_figure);
 void                my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void                ray_tracing(t_data *img, t_scene scene);
