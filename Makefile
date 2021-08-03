@@ -3,14 +3,15 @@ DIR_INC = ./includes/
 DIR_SRCS = ./srcs/
 
 FUNC = 	scene/camera.c scene/light.c \
-	  	utils/vector.c utils/vector2.c utils/gnl.c utils/error.c utils/ato_pars.c utils/math.c \
+	  	utils/vector.c utils/vector2.c utils/gnl.c utils/error.c utils/ato_pars.c utils/other.c \
 	  	scene/scene.c scene/plane.c scene/sphere.c scene/triangle.c scene/square.c scene/cylinder.c \
-		main.c \
-		utils/color.c \
-		parser/parser.c parser/parser_object_scene.c parser/parser_object_figure.c \
+		render.c \
+		utils/color.c utils/image.c \
+		parser/parser.c parser/parser_object_scene.c parser/parser_object_figure.c parser/parse_utils.c \
 		ray_tracing/ray_tracing.c \
 		ray_tracing/intersect/intersect_object.c ray_tracing/intersect/intersect_plane.c ray_tracing/intersect/intersect_sphere.c \
-		ray_tracing/intersect/intersect_triangle.c ray_tracing/intersect/intersect_square.c ray_tracing/intersect/intersect_cylinder.c ray_tracing/lighting/lighting.c
+		ray_tracing/intersect/intersect_triangle.c ray_tracing/intersect/intersect_square.c ray_tracing/intersect/intersect_cylinder.c \
+		ray_tracing/lighting/lighting.c ray_tracing/lighting/shadow.c ray_tracing/lighting/utils_lighting.c
 
 SRCS = $(addprefix $(DIR_SRCS), $(FUNC))
 
@@ -21,9 +22,9 @@ NAME = miniRT
 LIBMLX = libmlx.dylib
 
 GCC = gcc
-FLAGS =  -g
+FLAGS = -Wall -Wextra -Werror
 
-%.o: %.c
+%.o: %.c $(DIR_INC)minirt.h
 	$(GCC) $(FLAGS) -I $(DIR_INC) -c $< -o $@
 
 $(NAME): $(OBJS)

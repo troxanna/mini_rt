@@ -20,5 +20,9 @@ void	ft_error(int id_err)
 		perror("Ошибка парсера");
 	else if (id_err == 3)
 		perror("Ошибка чтения файла");
+	else if (id_err == 4)
+		perror("Ошибка создания файла");
+	else if (id_err == 5)
+		perror("Неверное количество аргументов функции");
 	exit(EXIT_FAILURE);
 }

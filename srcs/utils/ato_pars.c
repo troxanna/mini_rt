@@ -12,6 +12,23 @@
 
 #include "../../includes/minirt.h"
 
+int				part_atof(int *i, char *str, float *result, float *point_zero)
+{
+	(*i)++;
+	if (str[*i] >= '0' && str[*i] <= '9')
+	{
+		while (str[*i] >= '0' && str[*i] <= '9')
+		{
+			*result = *result + (*point_zero * (str[*i] - '0'));
+			*point_zero *= 0.1;
+			(*i)++;
+		}
+		return (1);
+	}
+	else
+		return (0);
+}
+
 float			*ft_atof(char *str, int *i, float *result)
 {
 	float		point_zero;
@@ -32,17 +49,7 @@ float			*ft_atof(char *str, int *i, float *result)
 	*result = nb;
 	if (str[*i] == '.')
 	{
-		(*i)++;
-		if (str[*i] >= '0' && str[*i] <= '9')
-		{
-			while (str[*i] >= '0' && str[*i] <= '9')
-			{
-				*result = *result + (point_zero * (str[*i] - '0'));
-				point_zero *= 0.1;
-				(*i)++;
-			}
-		}
-		else
+		if (!(part_atof(i, str, result, &point_zero)))
 			return (NULL);
 	}
 	if (sign < 0)

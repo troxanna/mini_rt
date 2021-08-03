@@ -1,134 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect_object.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: troxanna <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/21 02:53:11 by troxanna          #+#    #+#             */
+/*   Updated: 2021/04/21 04:02:56 by troxanna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/minirt.h"
 
-float   intersect_object(t_object_params *object_params, t_object_figure *object_figure, t_vector *ray_dir)
+static void				set_params_flat(t_object_params *obj,
+								t_vector norm, t_rgb color, float t)
 {
-    //float       t;
-    //float       range_t[3];
-    float       tmp;
-    tmp = 65536;
-    float       closest_t;
-    t_vector    ray_dir_tmp;
-    t_object_params object_params_tmp;
-    //t = 0;
-    // range_t[0] = 0;
-    // range_t[1] = 1;
-    // range_t[2] = 65536;
+	obj->color = color;
+	obj->norm = norm;
+	obj->flag = 1;
+	obj->tmp_t[0] = t;
+}
 
-    if (object_figure->sphere && (closest_t = iterate_object_sphere(object_figure->sphere, &object_params_tmp, ray_dir, object_figure->ray_orig)))
-    {
-        tmp = closest_t;
+static void				set_params_volume(t_object_params *obj,
+								t_vector norm, t_rgb color, float t)
+{
+	obj->color = color;
+	obj->norm = norm;
+	obj->flag = 0;
+	obj->tmp_t[0] = t;
+}
 
-        object_params->color = object_params_tmp.color;
-        object_params->norm = object_params_tmp.norm;
-        object_params->flag = 0;
-        // if (tmp == NULL || (tmp && *tmp > range_t[0]))
-        // {
-        //     object_params->color = object_params_tmp.color;
-        //     object_params->norm = object_params_tmp.norm;
-        //     object_params->flag = 0;
-        //     tmp = range_t;
-        // }
-    }
-    if (object_figure->triangle && (closest_t = iterate_object_triangle(object_figure->triangle, &object_params_tmp, ray_dir, object_figure->ray_orig)))
-    {
-        if (closest_t < tmp)
-        {
-            tmp = closest_t;
-            object_params->color = object_params_tmp.color;
-            object_params->norm = object_params_tmp.norm;
-            object_params->flag = 1;
-        }
-    }
-    if (object_figure->plane && (closest_t = iterate_object_plane(object_figure->plane, &object_params_tmp, ray_dir, object_figure->ray_orig)))
-    {
-        if (closest_t < tmp)
-        {
-            tmp = closest_t;
-            object_params->color = object_params_tmp.color;
-            object_params->norm = object_params_tmp.norm;
-            object_params->flag = 1;
-        }
-    }
-    if (object_figure->square && (closest_t = iterate_object_square(object_figure->square, &object_params_tmp, ray_dir, object_figure->ray_orig)))
-    {
-        if (closest_t < tmp)
-        {
-            tmp = closest_t;
-            object_params->color = object_params_tmp.color;
-            object_params->norm = object_params_tmp.norm;
-            object_params->flag = 1;
-        }
-    }
-    if (object_figure->cylinder && (closest_t = iterate_object_cylinder(object_figure->cylinder, &object_params_tmp, ray_dir, object_figure->ray_orig)))
-    {
-        if (closest_t < tmp)
-        {
-            tmp = closest_t;
-            object_params->color = object_params_tmp.color;
-            object_params->norm = object_params_tmp.norm;
-            object_params->flag = 0;
-        }
-    }
-    // if (object_figure->triangle && (iterate_object_triangle(object_figure->triangle, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
-    // {
-    //     if (tmp == NULL || (tmp && *tmp > range_t[0]))
-    //     {
-    //         //printf("test");
-    //         object_params->color = object_params_tmp.color;
-    //         object_params->norm = object_params_tmp.norm;
-    //         object_params->intersect_point = object_params_tmp.intersect_point;
-    //         object_params->flag = 1;
-    //         tmp = range_t;
-    //     }
-    // }
-    // if (object_figure->square && (iterate_object_square(object_figure->square, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
-    // {
-    //     if (tmp == NULL || (tmp && *tmp > range_t[0]))
-    //     {
-    //         object_params->color = object_params_tmp.color;
-    //         object_params->norm = object_params_tmp.norm;
-    //         object_params->intersect_point = object_params_tmp.intersect_point;
-    //         object_params->flag = 1;
-    //         tmp = range_t;
-    //     }
-    // }
-    // if (object_figure->cylinder && (iterate_object_cylinder(object_figure->cylinder, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
-    // {
-    //     if (tmp == NULL || (tmp && *tmp > range_t[0]))
-    //     {
-    //         object_params->color = object_params_tmp.color;
-    //         object_params->norm = object_params_tmp.norm;
-    //         object_params->intersect_point = object_params_tmp.intersect_point;
-    //         object_params->flag = 0;
-    //         tmp = range_t;
-    //     }
-    // }
-    // if ((iterate_object_plane(object_figure->plane, &object_params_tmp, ray_dir, object_figure->ray_orig, range_t)))
-    // {
-    //     if (tmp == NULL || (tmp && *tmp > range_t[0]))
-    //     {
-    //         //printf("%s\n", "test");
-    //         object_params->color = object_params_tmp.color;
-    //         object_params->norm = object_params_tmp.norm;
-    //         object_params->flag = 1;
-    //         tmp = range_t;
-    //     }
-    // }
-    if (tmp != 65536)
-    {
-        t_vector tmp_vec;
-        init_vector(&ray_dir_tmp, ray_dir->x, ray_dir->y, ray_dir->z);
-        //if (object_params->flag == 1)
-            tmp = tmp * 0.9708;
-        //tmp = tmp * 0.9708;
-        scalars_mult_vectors(tmp, &ray_dir_tmp);
-        vector_addition(&(object_params->intersect_point), object_figure->ray_orig, &ray_dir_tmp);
-        // if (object_params->flag == 1)
-        // {
-        //     init_vector(&tmp_vec, object_params->norm.x * 0.01, object_params->norm.y * 0.01, object_params->norm.z * 0.01);
-        //     vector_addition(&(object_params->intersect_point), &(object_params->intersect_point), &tmp_vec);
-        // }
-        return (1);
-    }
-    return (0);
+static int				s_i_p(t_vector *ray_dir,
+							t_object_params *obj, t_vector *ray_orig)
+{
+	t_vector r_tmp;
+
+	init_vector(&r_tmp, ray_dir->x, ray_dir->y, ray_dir->z);
+	obj->tmp_t[0] = obj->tmp_t[0] * 0.93;
+	scalars_mult_vectors(obj->tmp_t[0], &r_tmp);
+	vector_addition(&(obj->intersect_point), ray_orig, &r_tmp);
+	return (1);
+}
+
+float					intersect_object(t_object_params *o_p,
+						t_object_scene *o_f, t_vector *ray_dir)
+{
+	t_object_params		o_p_tmp;
+
+	o_p->tmp_t[0] = 65536;
+	o_p_tmp.range[0] = 1;
+	o_p_tmp.range[1] = 65536;
+	if (o_f->sphere && (o_p->closest_t = iterate_object_sphere(o_f->sphere,
+										&o_p_tmp, ray_dir, o_f->ray_orig)))
+		set_params_volume(o_p, o_p_tmp.norm, o_p_tmp.color, o_p->closest_t);
+	if (o_f->triangle && (o_p->closest_t =
+	iterate_object_triangle(o_f->triangle, &o_p_tmp, ray_dir, o_f->ray_orig)))
+		if (o_p->closest_t < o_p->tmp_t[0])
+			set_params_flat(o_p, o_p_tmp.norm, o_p_tmp.color, o_p->closest_t);
+	if (o_f->plane && (o_p->closest_t = iterate_object_plane(o_f->plane,
+									&o_p_tmp, ray_dir, o_f->ray_orig)))
+		if (o_p->closest_t < o_p->tmp_t[0])
+			set_params_flat(o_p, o_p_tmp.norm, o_p_tmp.color, o_p->closest_t);
+	if (o_f->square && (o_p->closest_t = iterate_object_square(o_f->square,
+										&o_p_tmp, ray_dir, o_f->ray_orig)))
+		if (o_p->closest_t < o_p->tmp_t[0])
+			set_params_flat(o_p, o_p_tmp.norm, o_p_tmp.color, o_p->closest_t);
+	if (o_f->cylinder && (o_p->closest_t =
+	iterate_object_cylinder(o_f->cylinder, &o_p_tmp, ray_dir, o_f->ray_orig)))
+		if (o_p->closest_t < o_p->tmp_t[0])
+			set_params_volume(o_p, o_p_tmp.norm, o_p_tmp.color, o_p->closest_t);
+	return (o_p->tmp_t[0] != 65536) ? (s_i_p(ray_dir, o_p, o_f->ray_orig)) : 0;
 }
